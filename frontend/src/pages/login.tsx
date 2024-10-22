@@ -1,10 +1,11 @@
 import React from 'react';
+import { Container } from 'react-bootstrap';
 
 const Login: React.FC = () => {
   return (
-    <div>
-      <h1>Login Page</h1>
-    </div>
+    <Container>
+      <h1>Home Page</h1>
+    </Container>
   );
 }
 
