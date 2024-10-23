@@ -5,8 +5,11 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -26,7 +29,7 @@ const Login: React.FC = () => {
       });
 
       if (response.ok) {
-        console.log("Login successful!");
+        navigate('/');
       } else {
         console.error("Login failed");
       }
