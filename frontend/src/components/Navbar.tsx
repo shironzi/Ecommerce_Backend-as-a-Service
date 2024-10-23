@@ -25,7 +25,7 @@ function MyNavbar() {
             </Button>
             <Button
               variant="primary"
-              href="/auth/login"
+              href="/auth/register"
               size="lg"
               className="fw-bold"
               style={{
