@@ -29,7 +29,7 @@ const Login: React.FC = () => {
       });
 
       if (response.ok) {
-        navigate('/');
+        navigate('/app');
       } else {
         console.error("Login failed");
       }

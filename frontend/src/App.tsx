@@ -5,6 +5,7 @@ import MyNavbar from './components/Navbar';  // Assuming your navbar component i
 import Home from "./pages/Home";               // Adjusting for PascalCase for filenames
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Main from './pages/dashboard';
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Register />}></Route>
+        <Route path="/dashboard" element={<Main />}></Route>
       </Routes>
     </Router>
   );
