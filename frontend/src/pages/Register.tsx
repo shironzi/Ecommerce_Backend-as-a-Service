@@ -9,33 +9,38 @@ import Image from "react-bootstrap/Image";
 const Register: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [ConfirmPassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const payload = {
-      email,
-      password,
-      ConfirmPassword,
-    };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
     try {
-      const response = await fetch("https://website.name/auth/register", {
+      const response = await fetch(`/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          email,
+          password,
+          confirmPassword,
+        }),
       });
 
       if (response.ok) {
-        console.log("Login successful!");
+        alert("User registered successfully!");
+        // Optionally, redirect to login or another page
       } else {
-        console.error("Login failed");
+        const errorData = await response.json();
+        setError(errorData.message || "Registration failed");
       }
-    } catch (error) {
-      console.error("Error during submission", error);
+    } catch (err) {
+      setError("Error registering user");
     }
   };
 
@@ -52,6 +57,7 @@ const Register: React.FC = () => {
           />
         </Col>
         <Col>
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
@@ -80,7 +86,7 @@ const Register: React.FC = () => {
               <Form.Control
                 type="password"
                 placeholder="Confirm Password"
-                value={password}
+                value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
@@ -95,7 +101,7 @@ const Register: React.FC = () => {
             </Form.Group>
 
             <Button variant="primary" type="submit">
-              Submit
+              Register
             </Button>
           </Form>
         </Col>
@@ -105,3 +111,77 @@ const Register: React.FC = () => {
 };
 
 export default Register;
+
+// import React, { useState } from "react";
+
+// const RegisterPage: React.FC = () => {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [confirmPassword, setConfirmPassword] = useState("");
+//   const [error, setError] = useState("");
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     if (password !== confirmPassword) {
+//       setError("Passwords do not match");
+//       return;
+//     }
+
+//     try {
+//       const response = await fetch(`/auth/register`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           email,
+//           password,
+//           confirmPassword,
+//         }),
+//       });
+
+//       if (response.ok) {
+//         alert("User registered successfully!");
+//         // Optionally, redirect to login or another page
+//       } else {
+//         const errorData = await response.json();
+//         setError(errorData.message || "Registration failed");
+//       }
+//     } catch (err) {
+//       setError("Error registering user");
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <h1>Register</h1>
+//       {error && <p style={{ color: "red" }}>{error}</p>}
+//       <form onSubmit={handleSubmit}>
+//         <input
+//           type="email"
+//           placeholder="Email"
+//           value={email}
+//           onChange={(e) => setEmail(e.target.value)}
+//           required
+//         />
+//         <input
+//           type="password"
+//           placeholder="Password"
+//           value={password}
+//           onChange={(e) => setPassword(e.target.value)}
+//           required
+//         />
+//         <input
+//           type="password"
+//           placeholder="Confirm Password"
+//           value={confirmPassword}
+//           onChange={(e) => setConfirmPassword(e.target.value)}
+//           required
+//         />
+//         <button type="submit">Register</button>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default RegisterPage;

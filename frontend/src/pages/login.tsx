@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Image from 'react-bootstrap/Image';
+import Image from "react-bootstrap/Image";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -13,18 +13,16 @@ const Login: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const payload = {
-      email,
-      password,
-    };
-
     try {
-      const response = await fetch("https://website.name/auth/login", {
+      const response = await fetch("/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
 
       if (response.ok) {
@@ -44,7 +42,10 @@ const Login: React.FC = () => {
     >
       <Row className="w-100" style={{ maxWidth: "1000px" }}>
         <Col>
-          <Image src="https://todoist.b-cdn.net/assets/images/44245fc51c3e2ab05ee6d92c13e2e08a.png" fluid />
+          <Image
+            src="https://todoist.b-cdn.net/assets/images/44245fc51c3e2ab05ee6d92c13e2e08a.png"
+            fluid
+          />
         </Col>
         <Col>
           <Form onSubmit={handleSubmit}>
@@ -73,9 +74,9 @@ const Login: React.FC = () => {
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check type="checkbox" label="Remember Me" />
             </Form.Group>
-            
+
             <Button variant="primary" type="submit">
-              Submit
+              Login
             </Button>
           </Form>
         </Col>
