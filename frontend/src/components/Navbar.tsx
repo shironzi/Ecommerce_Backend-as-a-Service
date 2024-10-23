@@ -1,4 +1,3 @@
-import React from "react";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 
 function MyNavbar() {
@@ -13,7 +12,7 @@ function MyNavbar() {
           <Nav>
             <Button
               variant="link"
-              href="/login"
+              href="/auth/login"
               className="text-black"
               size="lg"
               style={{
@@ -26,7 +25,7 @@ function MyNavbar() {
             </Button>
             <Button
               variant="primary"
-              href="/signup"
+              href="/auth/login"
               size="lg"
               className="fw-bold"
               style={{
