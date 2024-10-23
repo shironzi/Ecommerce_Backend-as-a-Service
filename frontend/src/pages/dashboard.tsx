@@ -25,7 +25,8 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AllInboxIcon from "@mui/icons-material/AllInbox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
-import FilterListIcon from '@mui/icons-material/FilterList';
+import FilterListIcon from "@mui/icons-material/FilterList";
+import FormDialog from '../functions/Addtask';  // Import FormDialog component
 
 const drawerWidth = 240;
 
@@ -41,6 +42,7 @@ const icons = [
   <ReportGmailerrorredIcon />,
 ];
 
+// Drawer opening and closing styles
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -62,70 +64,62 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
+// Drawer header styling
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
+// AppBar props
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
+// AppBar styling
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})<AppBarProps>(({ theme }) => ({
+})<AppBarProps>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(["width", "margin"], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-      },
-    },
-  ],
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
 }));
 
+// Drawer styling
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme }) => ({
+})(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        ...openedMixin(theme),
-        "& .MuiDrawer-paper": openedMixin(theme),
-      },
-    },
-    {
-      props: ({ open }) => !open,
-      style: {
-        ...closedMixin(theme),
-        "& .MuiDrawer-paper": closedMixin(theme),
-      },
-    },
-  ],
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
 }));
 
+// Main MiniDrawer component
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false); // Dialog state
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -133,6 +127,16 @@ export default function MiniDrawer() {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  // Handle opening the Add Task dialog
+  const handleAddTask = () => {
+    setDialogOpen(true); // Open the dialog
+  };
+
+  // Handle closing the Add Task dialog
+  const handleCloseDialog = () => {
+    setDialogOpen(false); // Close the dialog
   };
 
   return (
@@ -145,12 +149,7 @@ export default function MiniDrawer() {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={[
-              {
-                marginRight: 5,
-              },
-              open && { display: "none" },
-            ]}
+            sx={[{ marginRight: 5 }, open && { display: "none" }]}
           >
             <MenuIcon />
           </IconButton>
@@ -158,78 +157,35 @@ export default function MiniDrawer() {
             Todo App
           </Typography>
           <IconButton>
-            <AccountCircleIcon
-              color="inherit"
-              fontSize="large"
-              sx={{ color: "#ffffff" }}
-            />
+            <AccountCircleIcon color="inherit" fontSize="large" sx={{ color: "#ffffff" }} />
           </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
+            {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-          {[
-            "Add Task",
-            "Search",
-            "Inbox",
-            "Today",
-            "Upcoming",
-            "Filters & Labels",
-          ].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+          {["Add Task", "Search", "Inbox", "Today", "Upcoming", "Filters & Labels"].map((text, index) => (
+            <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: 'initial',
-                      }
-                    : {
-                        justifyContent: 'center',
-                      },
+                  { minHeight: 48, px: 2.5 },
+                  open ? { justifyContent: "initial" } : { justifyContent: "center" },
                 ]}
+                onClick={index === 0 ? handleAddTask : () => alert(`${text} clicked!`)} // Handle Add Task separately
               >
                 <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: 'center',
-                    },
-                    open
-                      ? {
-                          mr: 3,
-                        }
-                      : {
-                          mr: 'auto',
-                        },
-                  ]}
+                  sx={[{ minWidth: 0, justifyContent: "center" }, open ? { mr: 3 } : { mr: "auto" }]}
                 >
                   {icons[index]}
                 </ListItemIcon>
                 <ListItemText
                   primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
+                  sx={[open ? { opacity: 1 } : { opacity: 0 }]}
                 />
               </ListItemButton>
             </ListItem>
@@ -237,58 +193,33 @@ export default function MiniDrawer() {
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+          {["All mail", "Trash", "Spam"].map((text, index) => (
+            <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: 'initial',
-                      }
-                    : {
-                        justifyContent: 'center',
-                      },
+                  { minHeight: 48, px: 2.5 },
+                  open ? { justifyContent: "initial" } : { justifyContent: "center" },
                 ]}
+                onClick={() => alert(`${text} clicked!`)}
               >
                 <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: 'center',
-                    },
-                    open
-                      ? {
-                          mr: 3,
-                        }
-                      : {
-                          mr: 'auto',
-                        },
-                  ]}
+                  sx={[{ minWidth: 0, justifyContent: "center" }, open ? { mr: 3 } : { mr: "auto" }]}
                 >
-                  {icons[index+6]}
+                  {icons[index + 6]}
                 </ListItemIcon>
                 <ListItemText
                   primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
+                  sx={[open ? { opacity: 1 } : { opacity: 0 }]}
                 />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}></Box>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      </Box>
+
+      <FormDialog open={dialogOpen} handleClose={handleCloseDialog} />
     </Box>
   );
 }
