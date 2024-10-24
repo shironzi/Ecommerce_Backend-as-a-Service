@@ -26,8 +26,9 @@ import AllInboxIcon from "@mui/icons-material/AllInbox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import AddTask from '../functions/Addtask';
+import AddTask from "../functions/Addtask";
 import SearchTask from "../functions/SearchTask";
+import TaskList from "../components/Inbox";
 
 const drawerWidth = 240;
 
@@ -122,6 +123,9 @@ export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
   const [addTaskOpen, setAddTaskOpen] = React.useState(false);
   const [searchTaskOpen, setSearchTaskOpen] = React.useState(false);
+  const [selectedMenu, setSelectedMenu] = React.useState<string | null>(
+    "Inbox"
+  );
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -131,20 +135,24 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
-  const handleSearchTask = () => {
-    setSearchTaskOpen(true);
+  const handleMenuClick = (menu: string) => {
+    setSelectedMenu(menu);
   };
 
   const handleAddTask = () => {
-    setAddTaskOpen(true);
+    setAddTaskOpen(true); // Open Add Task Dialog
+  };
+
+  const handleSearchTask = () => {
+    setSearchTaskOpen(true); // Open Search Task Dialog
   };
 
   const handleCloseAddTask = () => {
-    setAddTaskOpen(false);
+    setAddTaskOpen(false); // Close Add Task Dialog
   };
 
   const handleCloseSearchTask = () => {
-    setSearchTaskOpen(false);
+    setSearchTaskOpen(false); // Close Search Task Dialog
   };
 
   return (
@@ -165,29 +173,55 @@ export default function MiniDrawer() {
             Todo App
           </Typography>
           <IconButton>
-            <AccountCircleIcon color="inherit" fontSize="large" sx={{ color: "#ffffff" }} />
+            <AccountCircleIcon
+              color="inherit"
+              fontSize="large"
+              sx={{ color: "#ffffff" }}
+            />
           </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === "rtl" ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-          {["Add Task", "Search", "Inbox", "Today", "Upcoming", "Filters & Labels"].map((text, index) => (
+          {[
+            "Add Task",
+            "Search",
+            "Inbox",
+            "Today",
+            "Upcoming",
+            "Filters & Labels",
+          ].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={[
                   { minHeight: 48, px: 2.5 },
-                  open ? { justifyContent: "initial" } : { justifyContent: "center" },
+                  open
+                    ? { justifyContent: "initial" }
+                    : { justifyContent: "center" },
                 ]}
-                onClick={index === 0 ? handleAddTask : index === 1 ? handleSearchTask : () => alert(`${text} clicked!`)}
+                onClick={
+                  text === "Add Task"
+                    ? handleAddTask
+                    : text === "Search"
+                      ? handleSearchTask
+                      : () => handleMenuClick(text) // Use handleMenuClick for other menu items
+                }
               >
                 <ListItemIcon
-                  sx={[{ minWidth: 0, justifyContent: "center" }, open ? { mr: 3 } : { mr: "auto" }]}
+                  sx={[
+                    { minWidth: 0, justifyContent: "center" },
+                    open ? { mr: 3 } : { mr: "auto" },
+                  ]}
                 >
                   {icons[index]}
                 </ListItemIcon>
@@ -206,12 +240,17 @@ export default function MiniDrawer() {
               <ListItemButton
                 sx={[
                   { minHeight: 48, px: 2.5 },
-                  open ? { justifyContent: "initial" } : { justifyContent: "center" },
+                  open
+                    ? { justifyContent: "initial" }
+                    : { justifyContent: "center" },
                 ]}
                 onClick={() => alert(`${text} clicked!`)}
               >
                 <ListItemIcon
-                  sx={[{ minWidth: 0, justifyContent: "center" }, open ? { mr: 3 } : { mr: "auto" }]}
+                  sx={[
+                    { minWidth: 0, justifyContent: "center" },
+                    open ? { mr: 3 } : { mr: "auto" },
+                  ]}
                 >
                   {icons[index + 6]}
                 </ListItemIcon>
@@ -224,10 +263,12 @@ export default function MiniDrawer() {
           ))}
         </List>
       </Drawer>
+
+      {/* Main content area */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        {selectedMenu === "Inbox" && <TaskList />}
       </Box>
 
-      {/* Use separate states for AddTask and SearchTask */}
       <AddTask open={addTaskOpen} handleClose={handleCloseAddTask} />
       <SearchTask open={searchTaskOpen} handleClose={handleCloseSearchTask} />
     </Box>
