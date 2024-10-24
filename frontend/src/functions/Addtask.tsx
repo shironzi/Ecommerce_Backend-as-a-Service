@@ -19,7 +19,7 @@ interface FormDialogProps {
   handleClose: () => void;
 }
 
-export default function FormDialog({ open, handleClose }: FormDialogProps) {
+export default function AddTask({ open, handleClose }: FormDialogProps) {
   const [taskName, setTaskName] = React.useState("");
   const [priority, setPriority] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -36,26 +36,25 @@ export default function FormDialog({ open, handleClose }: FormDialogProps) {
       priority,
     };
     console.log(taskData);
-    handleClose(); // Close the dialog after submitting the task
+    handleClose();
   };
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      fullScreen={fullScreen} // Makes the dialog fullscreen on mobile devices
+      fullScreen={fullScreen}
       PaperProps={{
         component: "form",
         onSubmit: handleSubmit,
         sx: {
-          padding: { xs: "15px", sm: "25px" }, // Responsive padding for mobile and larger screens
+          padding: { xs: "15px", sm: "25px" },
           borderRadius: "10px",
         },
       }}
       maxWidth="sm"
       fullWidth
     >
-      {/* Dialog Title */}
       <DialogTitle>
         <Typography variant="h6" component="div" sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
           Add New Task

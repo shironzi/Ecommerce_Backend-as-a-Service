@@ -16,9 +16,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import MailIcon from "@mui/icons-material/Mail";
+import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import TodayIcon from "@mui/icons-material/Today";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -26,13 +26,14 @@ import AllInboxIcon from "@mui/icons-material/AllInbox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import FormDialog from '../functions/Addtask';  // Import FormDialog component
+import AddTask from '../functions/Addtask';
+import SearchTask from "../functions/SearchTask";
 
 const drawerWidth = 240;
 
 const icons = [
   <AddCircleIcon />,
-  <InboxIcon />,
+  <SearchIcon />,
   <MailIcon />,
   <TodayIcon />,
   <CalendarMonthIcon />,
@@ -119,7 +120,8 @@ const Drawer = styled(MuiDrawer, {
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [dialogOpen, setDialogOpen] = React.useState(false); // Dialog state
+  const [addTaskOpen, setAddTaskOpen] = React.useState(false);
+  const [searchTaskOpen, setSearchTaskOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -129,14 +131,20 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
-  // Handle opening the Add Task dialog
-  const handleAddTask = () => {
-    setDialogOpen(true); // Open the dialog
+  const handleSearchTask = () => {
+    setSearchTaskOpen(true);
   };
 
-  // Handle closing the Add Task dialog
-  const handleCloseDialog = () => {
-    setDialogOpen(false); // Close the dialog
+  const handleAddTask = () => {
+    setAddTaskOpen(true);
+  };
+
+  const handleCloseAddTask = () => {
+    setAddTaskOpen(false);
+  };
+
+  const handleCloseSearchTask = () => {
+    setSearchTaskOpen(false);
   };
 
   return (
@@ -176,7 +184,7 @@ export default function MiniDrawer() {
                   { minHeight: 48, px: 2.5 },
                   open ? { justifyContent: "initial" } : { justifyContent: "center" },
                 ]}
-                onClick={index === 0 ? handleAddTask : () => alert(`${text} clicked!`)} // Handle Add Task separately
+                onClick={index === 0 ? handleAddTask : index === 1 ? handleSearchTask : () => alert(`${text} clicked!`)}
               >
                 <ListItemIcon
                   sx={[{ minWidth: 0, justifyContent: "center" }, open ? { mr: 3 } : { mr: "auto" }]}
@@ -219,7 +227,9 @@ export default function MiniDrawer() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
       </Box>
 
-      <FormDialog open={dialogOpen} handleClose={handleCloseDialog} />
+      {/* Use separate states for AddTask and SearchTask */}
+      <AddTask open={addTaskOpen} handleClose={handleCloseAddTask} />
+      <SearchTask open={searchTaskOpen} handleClose={handleCloseSearchTask} />
     </Box>
   );
 }
