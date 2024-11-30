@@ -2,7 +2,7 @@ import { CgProfile } from "react-icons/cg";
 
 function Nav() {
   return (
-    <nav className="flex justify-between px-40 py-5 items-center bg-gradient-to-r">
+    <nav className="flex justify-between px-40 py-5 items-center bg-gradient-to-r border-solid border shadow">
       <a href=""><h1 className="font-explore text-3xl font-semibold">Shironzi</h1></a>
       <div className="flex justify-between space-x-9 items-center">
         <a className="font-medium" href="">Laptops</a>
