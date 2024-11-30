@@ -1,7 +1,3 @@
-Here's a concise and professional **README.md** for the described **Ecommerce Backend-as-a-Service (BaaS)**:
-
----
-
 # Ecommerce Backend-as-a-Service (BaaS)
 
 ## Overview
@@ -90,7 +86,7 @@ Each feature is encapsulated as an independent, loosely coupled microservice. Th
 
    ```bash
    git clone https://github.com/shironzi/Ecommerce_Backend-as-a-Service.git
-   cd ecommerce-baas
+   cd Ecommerce_backend-as-a-Service
    ```
 
 2. **Configure Environment Variables**
@@ -116,22 +112,6 @@ Each feature is encapsulated as an independent, loosely coupled microservice. Th
      ```bash
      kubectl logs -l app=<service-name>
      ```
-
----
-
-## API Endpoints
-
-| Service            | Endpoint                 | Method | Description                    |
-| ------------------ | ------------------------ | ------ | ------------------------------ |
-| **Product**        | `/products`              | GET    | List all products              |
-|                    | `/products/{id}`         | GET    | Fetch a single product         |
-|                    | `/products`              | POST   | Create a new product           |
-| **Cart**           | `/cart`                  | GET    | Get current cart               |
-|                    | `/cart`                  | POST   | Add item to cart               |
-|                    | `/cart/{itemId}`         | DELETE | Remove item from cart          |
-| **Checkout**       | `/checkout`              | POST   | Initiate checkout process      |
-| **Inventory**      | `/inventory/{productId}` | GET    | Check stock for a product      |
-| **Recommendation** | `/recommendations`       | GET    | Fetch personalized suggestions |
 
 ---
 
